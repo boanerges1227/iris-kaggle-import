@@ -9,7 +9,8 @@ ENV IRISNAMESPACE="USER"
 ENV PATH="/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin"
 ENV PYTHONPATH="/home/irisowner/dev:/home/irisowner/dev/python"
 
-RUN pip3 install --no-cache-dir --break-system-packages "kagglehub>=0.3" "pyarrow>=14.0"
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
 COPY . .
 

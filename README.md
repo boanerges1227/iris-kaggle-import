@@ -145,7 +145,7 @@ Create credentials at [kaggle.com/settings](https://www.kaggle.com/settings) →
 - InterSystems IRIS with Embedded Python (tested with IRIS Community 2026.1 and
   IRIS for Health Community 2026.2 on ARM64;
   compatibility with older releases has not been verified)
-- Python packages: `kagglehub>=0.3`, `pyarrow>=14.0`
+- Python packages: `kagglehub>=0.3`, `pyarrow>=14.0`, `rpds-py>=0.7.1`
 
 ## IPM Installation
 
@@ -153,13 +153,23 @@ On an existing IRIS instance with IPM installed, network access, and permission 
 install Python packages into the instance's Python directory:
 
 ```objectscript
-zpm "load /path/to/iris-kaggle-import"
+zpm "load /path/to/iris-kaggle-import -extra-pip-flags ""--upgrade"""
 ```
 
 IPM installs the Python dependencies from `requirements.txt` and copies the loader
-module into the instance's Python library directory. The local `zpm load` path was
-verified on a clean IRIS Community 2026.1 ARM64 instance with a real dataset. A
-registry install command will be available only after the package is published.
+module into the instance's Python library directory. The `--upgrade` flag is important:
+IPM installs into the shared `mgr/python` directory, and without it pip may leave old
+package files in place even after installing newer metadata. This can upgrade shared
+dependencies used by other applications; verify compatibility on an existing instance.
+`rpds-py` is included for IPM installations that lack a dependency of its JSON tooling.
+With pip's `--target` installation, older `.dist-info` directories may remain even
+after the importable package is upgraded; check the actual loaded version as well as
+`pip check`. Do not delete shared metadata without checking other applications.
+After version 1.0.1 is published to the IPM registry, use:
+
+```objectscript
+zpm "install iris-kaggle-import -extra-pip-flags ""--upgrade"""
+```
 
 ## Tests
 

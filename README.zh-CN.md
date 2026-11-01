@@ -73,10 +73,18 @@ KAGGLE_API_TOKEN=your_token docker compose up -d --wait
 项目需要 Embedded Python、IPM、网络连接，以及向实例 Python 目录安装依赖的权限。在目标实例中执行：
 
 ```objectscript
-zpm "load /path/to/iris-kaggle-import"
+zpm "load /path/to/iris-kaggle-import -extra-pip-flags ""--upgrade"""
 ```
 
-IPM 会根据 `requirements.txt` 安装 `kagglehub` 和 `pyarrow`，并复制项目 Python 模块。本地 `zpm load` 已在干净的 IRIS Community 2026.1 ARM64 实例中验证，并通过真实数据集导入；注册表安装命令需要先发布软件包。
+IPM 会根据 `requirements.txt` 安装 `kagglehub`、`pyarrow` 和 `rpds-py`，并复制项目 Python 模块。`--upgrade` 用于避免 IPM 安装到共享 `mgr/python` 目录时保留旧文件、却写入新版本元数据；它可能升级其他应用共用的依赖，在已有实例中请先验证兼容性。`rpds-py` 用于补齐部分 IPM 安装缺少的 JSON 组件依赖。
+
+由于 pip 使用 `--target` 安装，升级后可能仍保留旧版 `.dist-info` 目录；请同时检查实际加载的版本和 `pip check`，不要在未检查其他应用的情况下删除共享元数据。
+
+版本 1.0.1 发布到 IPM 注册表后，可执行：
+
+```objectscript
+zpm "install iris-kaggle-import -extra-pip-flags ""--upgrade"""
+```
 
 ## 测试
 
