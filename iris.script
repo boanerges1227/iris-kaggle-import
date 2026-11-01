@@ -1,0 +1,13 @@
+zn "%SYS"
+    do ##class(Security.Users).UnExpireUserPasswords("*")
+    do ##class(Security.Services).Get("%Service_CallIn",.p)
+    set p("Enabled")=1
+    set p("AutheEnabled")=48
+    do ##class(Security.Services).Modify("%Service_CallIn",.p)
+
+    zn "USER"
+    set sc = ##class(%SYSTEM.OBJ).LoadDir("/home/irisowner/dev/src","ck",,1)
+    if $system.Status.IsError(sc) do $system.Status.DisplayError(sc) halt
+
+    write !,"KAGGLELOADER_BUILD_OK=1",!
+    halt

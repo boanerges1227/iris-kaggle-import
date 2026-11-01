@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26">
+  <Document name="iris-kaggle-import.ZPM">
+    <Module>
+      <Name>iris-kaggle-import</Name>
+      <Version>1.0.0</Version>
+      <Description>Load Kaggle datasets into InterSystems IRIS tables with one line of ObjectScript</Description>
+      <Packaging>module</Packaging>
+      <SourcesRoot>src</SourcesRoot>
+      <Resource Name="dc.kaggleloader.PKG"/>
+      <FileCopy Name="python/kaggleloader" Target="${libdir}python/kaggleloader/"/>
+    </Module>
+  </Document>
+</Export>

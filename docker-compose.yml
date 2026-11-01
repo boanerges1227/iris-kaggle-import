@@ -1,0 +1,28 @@
+services:
+  iris:
+    build:
+      context: .
+      args:
+        IMAGE: ${IRIS_IMAGE:-intersystems/irishealth-community:2026.2}
+    container_name: iris-kaggle-import
+    restart: unless-stopped
+    environment:
+      - KAGGLE_USERNAME=${KAGGLE_USERNAME:-}
+      - KAGGLE_KEY=${KAGGLE_KEY:-}
+      - KAGGLE_API_TOKEN=${KAGGLE_API_TOKEN:-}
+      - KAGGLE_MAX_ROWS=${KAGGLE_MAX_ROWS:-1000000}
+      - KAGGLE_MAX_FILE_MB=${KAGGLE_MAX_FILE_MB:-100}
+      - PYTHONPATH=/home/irisowner/dev:/home/irisowner/dev/python
+    ports:
+      - "21975:1972"
+      - "52997:52773"
+    volumes:
+      - ./src:/home/irisowner/dev/src
+      - ./python:/home/irisowner/dev/python
+      - ./tests:/home/irisowner/dev/tests
+    healthcheck:
+      test: ["CMD", "iris", "session", "IRIS", "-U", "USER", "##class(dc.kaggleloader.Loader).Health()"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s

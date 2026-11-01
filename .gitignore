@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Docker
+*.log
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Dev docs
+PLAN.md
+docs/superpowers/
+worklog/
+docs/工作日志-*.md
+
+# Dev test code
+tests/test_core.py
+
+# Local config
+.env
+.env.*
